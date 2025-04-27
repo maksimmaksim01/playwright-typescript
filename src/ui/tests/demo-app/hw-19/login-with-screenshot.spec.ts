@@ -11,12 +11,10 @@ test.describe("[UI] Registration", () => {
   const emailInput = "#emailinput";
   const passwordInput = "#passwordinput";
   const loginButton = ".btn-lg";
-  const totalOrdersContainer = "#total-orders-container";
-  const ordersChartContainer = "#orders-chart-container";
-  const recentOrdersContainer = "#recent-orders-container";
+  const welcomeText = ".welcome-text";
+  const spinner = ".overlay-spinner";
   const userMenuDropdown = "#dropdownUser1";
   const navigationMenu = "//*[contains(@class, 'nav-pills')]";
-
 
   test.beforeEach(async ({ page }) => {
     await page.goto(baseUrl);
@@ -29,10 +27,14 @@ test.describe("[UI] Registration", () => {
     await page.locator(passwordInput).fill(validCredentials.password);
     await page.locator(loginButton).click();
 
-    await expect(page.locator(totalOrdersContainer)).toBeVisible();
-    await expect(page.locator(ordersChartContainer)).toBeVisible();
-    await expect(page.locator(recentOrdersContainer)).toBeVisible();
+    await expect(page.locator(welcomeText)).toBeVisible();
+    const spinners = await page.locator(spinner).all();
 
+    for (const spinner of spinners) {
+      await spinner.waitFor({ state: "hidden" });
+    }
+
+    await expect(page.locator(spinner)).not.toBeVisible();
     await expect(page.locator(userMenuDropdown)).toContainText("Anatoly");
     await expect(page.locator(navigationMenu)).toHaveScreenshot();
   });
