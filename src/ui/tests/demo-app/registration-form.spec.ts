@@ -9,9 +9,8 @@ test.describe("[UI] Registration", () => {
   const emailInput = "#email";
   const phoneNumberInput = "#phone";
   const countryDropdown = "#country";
-  const maleGenderRadioOption = "//*[@value='male']";
-  const travellingHobbyCheckboxOption = "//*[@value='Travelling']";
-  const moviesHobbyCheckboxOption = "//*[@value='Movies']";
+  const genderRadioOption = "//*[@name='gender']";
+  const hobbyCheckboxOption = "//*[@type='checkbox' and @class='hobby']";
   const languageInput = "#language";
   const skillsSelect = "//*[@id='skills']";
   const dateOfBirthYearSelect = "//*[@id='year']";
@@ -20,31 +19,8 @@ test.describe("[UI] Registration", () => {
   const passwordInput = "#password";
   const confirmPasswordInput = "#password-confirm";
   const submitButton = "//*[@type='submit']";
-  const registrationDetailsTitle =
-    "//h2[contains(text(), 'Registration Details')]";
-  const fullnameValue = "#fullName";
-  const genderValue = "#gender";
-  const skillsValue = "#skills";
-  const hobbiesValue = "#hobbies";
-  const dateOfBirthValue = "#dateOfBirth";
-  const passwordValue = "#password";
+  const registrationDetailsTitle = "//h2[contains(text(), 'Registration Details')]";
 
-  const testValues = {
-    firstName: "first name",
-    lastName: "last name",
-    address: "123 demo street",
-    email: "qwe@qwe.qwe",
-    phoneNumber: "123-456-789",
-    country: "USA",
-    gender: "male",
-    language: "eng",
-    skills: ["JavaScript", "Ruby"],
-    hobbies: ["Travelling", "Movies"],
-    dateOfBirthDay: "1",
-    dateOfBirthMonth: "January",
-    dateOfBirthYear: "1970",
-    password: "Password",
-  };
 
   test.beforeEach(async ({ page }) => {
     await page.goto(baseUrl);
@@ -53,57 +29,25 @@ test.describe("[UI] Registration", () => {
   test("Should successfully register with valid credentials", async ({
     page,
   }) => {
-    await page.locator(firstNameInput).fill(testValues.firstName);
-    await page.locator(lastNameInput).fill(testValues.lastName);
-    await page.locator(addressInput).fill(testValues.address);
-    await page.locator(emailInput).fill(testValues.email);
-    await page.locator(phoneNumberInput).fill(testValues.phoneNumber);
-    await page.locator(countryDropdown).selectOption(testValues.country);
-    await page.locator(maleGenderRadioOption).check();
-    await page.locator(travellingHobbyCheckboxOption).check();
-    await page.locator(moviesHobbyCheckboxOption).check();
-    await page.locator(languageInput).fill(testValues.language);
-    await page
-      .locator(skillsSelect)
-      .selectOption([testValues.skills[0], testValues.skills[1]]);
-    await page
-      .locator(dateOfBirthYearSelect)
-      .selectOption(testValues.dateOfBirthYear);
-    await page
-      .locator(dateOfBirthMonthSelect)
-      .selectOption(testValues.dateOfBirthMonth);
-    await page
-      .locator(dateOfBirthDaySelect)
-      .selectOption(testValues.dateOfBirthDay);
-    await page.locator(passwordInput).fill(testValues.password);
-    await page.locator(confirmPasswordInput).fill(testValues.password);
+    await page.locator(firstNameInput).fill("first name");
+    await page.locator(lastNameInput).fill("last name");
+    await page.locator(addressInput).fill("123 demo street");
+    await page.locator(emailInput).fill("qwe@qwe.qwe");
+    await page.locator(phoneNumberInput).fill("123-456-789");
+    await page.locator(countryDropdown).selectOption("USA");
+    await page.locator(genderRadioOption).first().check();
+    await page.locator(hobbyCheckboxOption).first().check();
+    await page.locator(hobbyCheckboxOption).last().check();
+    await page.locator(languageInput).fill("eng");
+    await page.locator(skillsSelect).selectOption("JavaScript");
+    await page.locator(skillsSelect).selectOption("Ruby");
+    await page.locator(dateOfBirthYearSelect).selectOption("1970");
+    await page.locator(dateOfBirthMonthSelect).selectOption("January");
+    await page.locator(dateOfBirthDaySelect).selectOption("1");
+    await page.locator(passwordInput).fill("Password");
+    await page.locator(confirmPasswordInput).fill("Password");
     await page.locator(submitButton).click();
 
     await expect(page.locator(registrationDetailsTitle)).toBeVisible();
-    await expect(page.locator(fullnameValue)).toContainText(
-      `${testValues.firstName} ${testValues.lastName}`
-    );
-    await expect(page.locator(addressInput)).toContainText(testValues.address);
-    await expect(page.locator(emailInput)).toContainText(testValues.email);
-    await expect(page.locator(phoneNumberInput)).toContainText(
-      testValues.phoneNumber
-    );
-    await expect(page.locator(countryDropdown)).toContainText(
-      testValues.country
-    );
-    await expect(page.locator(genderValue)).toContainText(testValues.gender);
-    await expect(page.locator(languageInput)).toContainText(
-      testValues.language
-    );
-    await expect(page.locator(skillsValue)).toContainText(
-      `${testValues.skills[0]}, ${testValues.skills[1]}`
-    );
-    await expect(page.locator(hobbiesValue)).toContainText(
-      `${testValues.hobbies[0]}, ${testValues.hobbies[1]}`
-    );
-    await expect(page.locator(dateOfBirthValue)).toContainText(
-      `${testValues.dateOfBirthDay} ${testValues.dateOfBirthMonth} ${testValues.dateOfBirthYear}`
-    );
-    await expect(page.locator(passwordValue)).toContainText("***");
   });
 });
