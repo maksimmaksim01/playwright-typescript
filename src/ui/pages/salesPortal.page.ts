@@ -1,5 +1,4 @@
 import { expect, Locator, Page } from "@playwright/test";
-import { NOTIFICATIONS } from "data/notifications.data";
 
 export abstract class SalesPortalPage {
   spinner: Locator;
@@ -11,9 +10,13 @@ export abstract class SalesPortalPage {
     this.notification = page.locator(".toast-body");
   }
 
-  async waitForOpened() {
+  async waitForOpenedWithSpinner() {
     await expect(this.uniqueElement).toBeVisible();
     await this.waitForSpinner();
+  }
+
+  async waitForOpenedWithoutSpinner() {
+    await expect(this.uniqueElement).toBeVisible();
   }
 
   async waitForSpinner() {
