@@ -1,20 +1,19 @@
 import { ICustomer } from "types/customer.types";
 import { SalesPortalPage } from "../salesPortal.page";
-import { Locator } from "@playwright/test";
 
 export class AddNewCustomerPage extends SalesPortalPage {
-  emailInput = this.page.locator("#inputEmail");
-  nameInput = this.page.locator("#inputName");
-  countryInput = this.page.locator("#inputCountry");
-  cityInput = this.page.locator("#inputCity");
-  streetInput = this.page.locator("#inputStreet");
-  houseInput = this.page.locator("#inputHouse");
-  flatInput = this.page.locator("#inputFlat");
-  phoneInput = this.page.locator("#inputPhone");
-  notesInput = this.page.locator("#textareaNotes");
-  saveNewCustomerButton = this.page.locator("#save-new-customer");
+  readonly emailInput = this.page.locator("#inputEmail");
+  readonly nameInput = this.page.locator("#inputName");
+  readonly countryInput = this.page.locator("#inputCountry");
+  readonly cityInput = this.page.locator("#inputCity");
+  readonly streetInput = this.page.locator("#inputStreet");
+  readonly houseInput = this.page.locator("#inputHouse");
+  readonly flatInput = this.page.locator("#inputFlat");
+  readonly phoneInput = this.page.locator("#inputPhone");
+  readonly notesInput = this.page.locator("#textareaNotes");
+  readonly saveNewCustomerButton = this.page.locator("#save-new-customer");
 
-  uniqueElement = this.saveNewCustomerButton;
+  readonly uniqueElement = this.saveNewCustomerButton;
 
   async fillInputs(customer: Partial<ICustomer>) {
     customer.email && (await this.emailInput.fill(customer.email));
