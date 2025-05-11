@@ -1,8 +1,8 @@
 import { expect, Locator, Page } from "@playwright/test";
 
 export abstract class SalesPortalPage {
-  spinner: Locator;
-  notification: Locator;
+  readonly spinner: Locator;
+  readonly notification: Locator;
   abstract uniqueElement: Locator;
 
   constructor(protected page: Page) {

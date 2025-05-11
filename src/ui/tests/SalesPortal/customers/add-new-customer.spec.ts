@@ -7,7 +7,6 @@ import { CustomerDetails } from "ui/pages/customers/customer-details.page";
 import { CustomersPage } from "ui/pages/customers/customers.page";
 import { HomePage } from "ui/pages/home.page";
 import { SignInPage } from "ui/pages/signIn.page";
-import { assertTextValue } from "utils/assertion.utils";
 
 test.beforeEach(async ({ page }) => {
   await page.goto("https://anatoly-karpovich.github.io/aqa-course-project/#");
@@ -43,21 +42,22 @@ test.describe("[UI] [Sales Portal] [Customers]", async () => {
     await customersPage.clickCustomerDetails();
 
     await customerDetailsPage.waitForOpenedWithSpinner();
-    
-    await assertTextValue(customerDetailsPage.emailValue, data.email);
-    await assertTextValue(customerDetailsPage.nameValue, data.name);
-    await assertTextValue(customerDetailsPage.phoneValue, data.phone);
+
+    await expect(customerDetailsPage.emailValue).toHaveText(data.email);
+    await expect(customerDetailsPage.nameValue).toHaveText(data.name);
+    await expect(customerDetailsPage.phoneValue).toHaveText(data.phone);
     if (data.notes !== undefined) {
-      await assertTextValue(customerDetailsPage.notesValue, data.notes);
+      await expect(customerDetailsPage.notesValue).toHaveText(data.notes);
     }
-    await assertTextValue(customerDetailsPage.countryValue, data.country);
-    await assertTextValue(customerDetailsPage.cityValue, data.city);
-    await assertTextValue(customerDetailsPage.streetValue, data.street);
-    await assertTextValue(
-      customerDetailsPage.houseValue,
+    await expect(customerDetailsPage.countryValue).toHaveText(data.country);
+    await expect(customerDetailsPage.cityValue).toHaveText(data.city);
+    await expect(customerDetailsPage.streetValue).toHaveText(data.street);
+    await expect(customerDetailsPage.houseValue).toHaveText(
       data.house.toString()
     );
-    await assertTextValue(customerDetailsPage.flatValue, data.flat.toString());
+    await expect(customerDetailsPage.flatValue).toHaveText(
+      data.flat.toString()
+    );
   });
 
   test("Should NOT create customer with duplicated email", async ({ page }) => {

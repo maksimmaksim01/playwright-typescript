@@ -1,6 +1,6 @@
 import { IUser } from "types/user.types";
 
-export function getUserData(data?: Partial<IUser>): IUser {
+export function getUserData(): IUser {
   return {
     username: "maksimTest",
     password: "Password",
