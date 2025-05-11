@@ -1,34 +1,23 @@
-import test, { expect } from "@playwright/test";
+import { test, expect } from "fixtures/businessSteps.fixture";
 import { generateCustomerData } from "data/customers/generateCustomer.data";
 import { NOTIFICATIONS } from "data/notifications.data";
 import { getUserData } from "data/user.data";
-import { AddNewCustomerPage } from "ui/pages/customers/add-new-customer.page";
-import { CustomerDetails } from "ui/pages/customers/customer-details.page";
-import { CustomersPage } from "ui/pages/customers/customers.page";
-import { HomePage } from "ui/pages/home.page";
-import { SignInPage } from "ui/pages/signIn.page";
 
-test.beforeEach(async ({ page }) => {
-  await page.goto("https://anatoly-karpovich.github.io/aqa-course-project/#");
+test.beforeEach(async ({ homePage, loginAsLocalUser }) => {
+  const userData = getUserData();
+
+  await loginAsLocalUser(userData);
+  await homePage.waitForOpenedWithSpinner();
+  await homePage.clickModuleButton("Customers");
 });
 
 test.describe("[UI] [Sales Portal] [Customers]", async () => {
-  const userData = getUserData();
-
-  test("Should create customer with smoke data", async ({ page }) => {
-    const signInPage = new SignInPage(page);
-    const homePage = new HomePage(page);
-    const customersPage = new CustomersPage(page);
-    const addNewCustomerPage = new AddNewCustomerPage(page);
-    const customerDetailsPage = new CustomerDetails(page);
+  test("Should create customer with smoke data", async ({
+    customersPage,
+    addNewCustomerPage,
+    customerDetailsPage,
+  }) => {
     const data = generateCustomerData();
-
-    await signInPage.waitForOpenedWithoutSpinner();
-    await signInPage.fillCredentials(userData);
-    await signInPage.clickOnLoginButton();
-
-    await homePage.waitForOpenedWithSpinner();
-    await homePage.clickModuleButton("Customers");
 
     await customersPage.waitForOpenedWithSpinner();
     await customersPage.clickAddNewCustomer();
@@ -60,33 +49,29 @@ test.describe("[UI] [Sales Portal] [Customers]", async () => {
     );
   });
 
-  test("Should NOT create customer with duplicated email", async ({ page }) => {
-    const signInPage = new SignInPage(page);
-    const homePage = new HomePage(page);
-    const customersPage = new CustomersPage(page);
-    const addNewCustomerPage = new AddNewCustomerPage(page);
+  test("Should NOT create customer with duplicated email", async ({
+    customersPage,
+    addNewCustomerPage,
+  }) => {
     const data = generateCustomerData();
 
-    await signInPage.waitForOpenedWithoutSpinner();
-    await signInPage.fillCredentials(userData);
-    await signInPage.clickOnLoginButton();
-
-    await homePage.waitForOpenedWithSpinner();
-    await homePage.clickModuleButton("Customers");
     await customersPage.waitForOpenedWithSpinner();
     await customersPage.clickAddNewCustomer();
+
     await addNewCustomerPage.waitForOpenedWithSpinner();
     await addNewCustomerPage.fillInputs(data);
     await addNewCustomerPage.clickSaveNewCustomer();
+
     await customersPage.waitForOpenedWithSpinner();
     await customersPage.waitForNotification(NOTIFICATIONS.CUSTOMER_CREATED);
-
     await customersPage.clickAddNewCustomer();
+
     await addNewCustomerPage.waitForOpenedWithSpinner();
     await addNewCustomerPage.fillInputs(
       generateCustomerData({ email: data.email })
     );
     await addNewCustomerPage.clickSaveNewCustomer();
+
     await customersPage.waitForNotification(
       NOTIFICATIONS.CUSTOMER_DUPLICATED(data.email)
     );

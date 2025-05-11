@@ -1,6 +1,6 @@
 import { SalesPortalPage } from "../salesPortal.page";
 
-export class CustomerDetails extends SalesPortalPage {
+export class CustomerDetailsPage extends SalesPortalPage {
   customerDetailsTitle = this.page.locator(
     "//h3[contains(.,'Customer Details')]"
   );
