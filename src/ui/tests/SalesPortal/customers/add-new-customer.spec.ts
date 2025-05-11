@@ -13,13 +13,13 @@ test.beforeEach(async ({ homePage, loginAsLocalUser }) => {
 
 test.describe("[UI] [Sales Portal] [Customers]", async () => {
   test("Should create customer with smoke data", async ({
-    homePage,
     customersPage,
     addNewCustomerPage,
     customerDetailsPage,
   }) => {
     const data = generateCustomerData();
 
+    await customersPage.waitForOpenedWithSpinner();
     await customersPage.clickAddNewCustomer();
 
     await addNewCustomerPage.waitForOpenedWithSpinner();

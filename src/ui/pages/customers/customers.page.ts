@@ -2,9 +2,11 @@ import { ICustomerInTable } from "types/customer.types";
 import { SalesPortalPage } from "../salesPortal.page";
 import { COUNTRIES } from "data/customers/countries.data";
 import { FilterModal } from "../modals/customers/filter.modal";
+import { DeleteModal } from "../modals/customers/delete.modal";
 
 export class CustomersPage extends SalesPortalPage {
   readonly filterModal = new FilterModal(this.page);
+  readonly deleteModal = new DeleteModal(this.page);
 
   readonly addNewCustomerButton = this.page.getByRole("button", {
     name: "Add Customer",
@@ -70,9 +72,7 @@ export class CustomersPage extends SalesPortalPage {
   }
 
   async getCustomerData(customerEmail: string): Promise<ICustomerInTable> {
-    const [email, name, country, createdOn] = await this.tableRowByEmail(
-      customerEmail
-    )
+    const [email, name, country] = await this.tableRowByEmail(customerEmail)
       .locator("td")
       .allInnerTexts();
     return {
@@ -87,9 +87,7 @@ export class CustomersPage extends SalesPortalPage {
 
     const rows = await this.tableRow.all();
     for (const row of rows) {
-      const [email, name, country, createdOn] = await row
-        .locator("td")
-        .allInnerTexts();
+      const [email, name, country] = await row.locator("td").allInnerTexts();
       tableData.push({
         email,
         name,
